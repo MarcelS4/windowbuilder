@@ -37,6 +37,13 @@ import java.util.List;
  * Holds information about a change in the layout model. Is able to undo/redo the change.
  */
 abstract class LayoutEvent extends EventObject {
+  /**
+   * COMMENT - Add concise description of the purpose of this field.
+   *           Description should go beyond the field's name.
+   * 
+   * Comment for <code>serialVersionUID</code>
+   */
+  private static final long serialVersionUID = 1L;
   static final int COMPONENT_ADDED = 1;
   static final int COMPONENT_REMOVED = 2;
   static final int LAYOUT_ROOTS_ADDED = 14;
@@ -77,6 +84,13 @@ abstract class LayoutEvent extends EventObject {
    * Change event related to an interval.
    */
   static class Interval extends LayoutEvent {
+    /**
+     * COMMENT - Add concise description of the purpose of this field.
+     *           Description should go beyond the field's name.
+     * 
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
     private LayoutInterval interval;
     private LayoutInterval parentInt;
     private int index;
@@ -215,6 +229,13 @@ abstract class LayoutEvent extends EventObject {
    * Change event related to a component.
    */
   static class Component extends LayoutEvent {
+    /**
+     * COMMENT - Add concise description of the purpose of this field.
+     *           Description should go beyond the field's name.
+     * 
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
     private LayoutComponent component;
     private LayoutComponent parentComp;
     private int index;

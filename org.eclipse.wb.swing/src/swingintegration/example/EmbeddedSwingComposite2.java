@@ -269,6 +269,14 @@ public abstract class EmbeddedSwingComposite2 extends Composite {
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=376561
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=291326
     JApplet applet = new JApplet() {
+      /**
+       * COMMENT - Add concise description of the purpose of this field.
+       *           Description should go beyond the field's name.
+       * 
+       * Comment for <code>serialVersionUID</code>
+       */
+      private static final long serialVersionUID = 1L;
+
       @Override
       public InputContext getInputContext() {
         return null;

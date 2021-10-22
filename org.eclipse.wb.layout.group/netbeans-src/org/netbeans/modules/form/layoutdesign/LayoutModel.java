@@ -926,6 +926,13 @@ public class LayoutModel implements LayoutConstants {
    * UndoableEdit implementation for series of changes in layout model.
    */
   private class LayoutUndoableEdit extends AbstractUndoableEdit {
+    /**
+     * COMMENT - Add concise description of the purpose of this field.
+     *           Description should go beyond the field's name.
+     * 
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
     private Object startMark;
     private Object endMark;
 
