@@ -28,7 +28,9 @@ import org.eclipse.wb.internal.core.utils.ui.dialogs.color.ColorsGridComposite;
 import org.eclipse.wb.internal.core.utils.ui.dialogs.color.pages.NamedColorsComposite;
 import org.eclipse.wb.internal.core.utils.ui.dialogs.color.pages.WebSafeColorsComposite;
 import org.eclipse.wb.internal.swing.model.ModelMessages;
+import org.eclipse.wb.internal.swing.preferences.colorchooser.IColorChooserPreferenceConstants;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.QualifiedName;
@@ -40,6 +42,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+
+import org.osgi.service.prefs.Preferences;
 
 import javax.swing.UIManager;
 
@@ -56,6 +60,9 @@ public final class ColorPropertyEditor extends PropertyEditor {
   //
   ////////////////////////////////////////////////////////////////////////////
   public static final PropertyEditor INSTANCE = new ColorPropertyEditor();
+  //Preferences for the color property editor
+  static Preferences preferences =
+      InstanceScope.INSTANCE.getNode(IColorChooserPreferenceConstants.PREFERENCE_NODE);
 
   private ColorPropertyEditor() {
   }
@@ -80,7 +87,8 @@ public final class ColorPropertyEditor extends PropertyEditor {
   }
 
   @Override
-  public void paint(Property property, GC gc, int x, int y, int width, int height) throws Exception {
+  public void paint(Property property, GC gc, int x, int y, int width, int height)
+      throws Exception {
     Object value = property.getValue();
     if (value instanceof java.awt.Color) {
       // draw color sample
@@ -181,7 +189,11 @@ public final class ColorPropertyEditor extends PropertyEditor {
   // Editing
   //
   ////////////////////////////////////////////////////////////////////////////
-  private static final ColorDialog m_colorDialog = new ColorDialog();
+  private static ColorDialog m_colorDialog = new ColorDialog();
+
+  public static void reloadColorDialog() {
+    m_colorDialog = new ColorDialog();
+  }
 
   @Override
   public boolean activate(PropertyTable propertyTable, Property property, Point location)
@@ -203,9 +215,8 @@ public final class ColorPropertyEditor extends PropertyEditor {
       Object value = property.getValue();
       if (value instanceof java.awt.Color) {
         java.awt.Color awtColor = (java.awt.Color) value;
-        m_colorDialog.setColorInfo(new ColorInfo(awtColor.getRed(),
-            awtColor.getGreen(),
-            awtColor.getBlue()));
+        m_colorDialog.setColorInfo(
+            new ColorInfo(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue()));
       }
     }
     // open dialog
@@ -274,21 +285,37 @@ public final class ColorPropertyEditor extends PropertyEditor {
     ////////////////////////////////////////////////////////////////////////////
     @Override
     protected void addPages(Composite parent) {
-      addPage(ModelMessages.ColorPropertyEditor_pageAwtColors, new AwtColorsPage(parent,
-          SWT.NONE,
-          this));
-      addPage(ModelMessages.ColorPropertyEditor_pageSystemColors, new SystemColorsPage(parent,
-          SWT.NONE,
-          this));
-      addPage(ModelMessages.ColorPropertyEditor_pageSwingColors, new SwingColorsPage(parent,
-          SWT.NONE,
-          this));
-      addPage(ModelMessages.ColorPropertyEditor_pageNamedColors, new NamedColorsComposite(parent,
-          SWT.NONE,
-          this));
-      addPage(ModelMessages.ColorPropertyEditor_pageWebColors, new WebSafeColorsComposite(parent,
-          SWT.NONE,
-          this));
+      Preferences prefs = preferences.node(IColorChooserPreferenceConstants.PREFERENCE_NODE_1);
+      if (prefs.getBoolean(IColorChooserPreferenceConstants.P_CUSTOM_COLORS, false)) {
+        addPage(
+            ModelMessages.ColorPropertyEditor_pageCustomColors,
+            new CustomColorPickerComposite(parent, SWT.NONE, this));
+      }
+      if (prefs.getBoolean(IColorChooserPreferenceConstants.P_AWT_COLORS, false)) {
+        addPage(
+            ModelMessages.ColorPropertyEditor_pageAwtColors,
+            new AwtColorsPage(parent, SWT.NONE, this));
+      }
+      if (prefs.getBoolean(IColorChooserPreferenceConstants.P_SYSTEM_COLORS, false)) {
+        addPage(
+            ModelMessages.ColorPropertyEditor_pageSystemColors,
+            new SystemColorsPage(parent, SWT.NONE, this));
+      }
+      if (prefs.getBoolean(IColorChooserPreferenceConstants.P_SWING_COLORS, false)) {
+        addPage(
+            ModelMessages.ColorPropertyEditor_pageSwingColors,
+            new SwingColorsPage(parent, SWT.NONE, this));
+      }
+      if (prefs.getBoolean(IColorChooserPreferenceConstants.P_NAMED_COLORS, false)) {
+        addPage(
+            ModelMessages.ColorPropertyEditor_pageNamedColors,
+            new NamedColorsComposite(parent, SWT.NONE, this));
+      }
+      if (prefs.getBoolean(IColorChooserPreferenceConstants.P_WEB_SAFE_COLORS, false)) {
+        addPage(
+            ModelMessages.ColorPropertyEditor_pageWebColors,
+            new WebSafeColorsComposite(parent, SWT.NONE, this));
+      }
     }
   }
   ////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.wb.swing;singleton:=true
 Bundle-Version: 1.9.1.qualifier
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ swing2swt.jar
 Bundle-Activator: org.eclipse.wb.internal.swing.Activator
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
