@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
+ *    DSA - Addition of icons type styling
  *******************************************************************************/
 package org.eclipse.wb.internal.core.editor.palette;
 
@@ -80,6 +81,10 @@ import java.util.Set;
  */
 public class DesignerPalette {
   public static final String FLAG_NO_PALETTE = "FLAG_NO_PALETTE"; // Don't load palette during testing
+  public static int COLUMN_ICONS_TYPE = 0;
+  public static int LIST_ICONS_TYPE = 1;
+  public static int ONLY_ICONS_TYPE = 2;
+  public static int DETAIL_ICONS_TYPE = 3;
   ////////////////////////////////////////////////////////////////////////////
   //
   // Instance fields
@@ -392,8 +397,11 @@ public class DesignerPalette {
         return categories;
       }
 
-      public void addPopupActions(IMenuManager menuManager, Object target) {
-        new DesignerPalettePopupActions(getOperations()).addPopupActions(menuManager, target);
+      public void addPopupActions(IMenuManager menuManager, Object target, int iconsType) {
+        new DesignerPalettePopupActions(getOperations()).addPopupActions(
+            menuManager,
+            target,
+            iconsType);
       }
 
       public void selectDefault() {
@@ -504,6 +512,13 @@ public class DesignerPalette {
         dialog.commit();
         m_paletteComposite.setPreferences(m_preferences);
       }
+    }
+
+    public void setIconsType(int iconsType) {
+      m_paletteComposite.setLayoutType(iconsType);
+      m_preferences.setLayoutType(iconsType);
+      m_paletteComposite.setPreferences(m_preferences);
+      m_paletteComposite.refreshComposite();
     }
 
     public EntryInfo getEntry(Object target) {

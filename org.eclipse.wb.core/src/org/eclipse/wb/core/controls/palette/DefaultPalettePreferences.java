@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
+ *    DSA - layout type added
  *******************************************************************************/
 package org.eclipse.wb.core.controls.palette;
 
@@ -33,5 +34,9 @@ public final class DefaultPalettePreferences implements IPalettePreferences {
 
   public int getMinColumns() {
     return 1;
+  }
+
+  public int getLayoutType() {
+    return 0;
   }
 }

@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
+ *    DSA - Addition of LayoutDialogFieldGroup
  *******************************************************************************/
 package org.eclipse.wb.internal.core.utils.dialogfields;
 
@@ -48,6 +49,8 @@ public class DialogFieldUtils {
       control = ((CheckedListDialogField) field).getListControl(parent);
     } else if (field instanceof FontDialogField) {
       control = ((FontDialogField) field).getGroupControl(parent);
+    } else if (field instanceof LayoutDialogFieldGroup) {
+      control = ((LayoutDialogFieldGroup) field).getSelectionButtonsGroup(parent);
     } else {
       throw new IllegalArgumentException("Not supported dialog field: " + field);
     }
