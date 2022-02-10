@@ -386,7 +386,7 @@ public class DesignerPalette {
         return categories;
       }
 
-      public void addPopupActions(IMenuManager menuManager, Object target) {
+      public void addPopupActions(IMenuManager menuManager, Object target, int iconType) {
         new DesignerPalettePopupActions(getOperations()).addPopupActions(menuManager, target);
       }
 
@@ -461,10 +461,9 @@ public class DesignerPalette {
      * Edits palette using {@link PaletteManagerDialog}.
      */
     public void editPalette() {
-      PaletteManagerDialog dialog =
-          new PaletteManagerDialog(m_rootObject.getContext(),
-              m_manager.getPalette(),
-              m_goodEntryInfos);
+      PaletteManagerDialog dialog = new PaletteManagerDialog(m_rootObject.getContext(),
+          m_manager.getPalette(),
+          m_goodEntryInfos);
       // reload in any case
       reloadPalette();
       // add commands used to update palette in dialog
@@ -500,11 +499,10 @@ public class DesignerPalette {
     }
 
     public void addComponent(CategoryInfo category) {
-      ComponentAddDialog dialog =
-          new ComponentAddDialog(getShell(),
-              m_rootObject.getContext(),
-              m_manager.getPalette(),
-              category);
+      ComponentAddDialog dialog = new ComponentAddDialog(getShell(),
+          m_rootObject.getContext(),
+          m_manager.getPalette(),
+          category);
       if (dialog.open() == Window.OK) {
         commands_addWrite(dialog.getCommand());
       }

@@ -147,9 +147,6 @@ public final class PluginPalettePreferences implements IPalettePreferences {
     m_store.setValue(m_minColumnsKey, minColumns);
   }
 
-  /**
-   * Sets the minimal number of columns for {@link ICategory}.
-   */
   public void setLayoutType(int layoutTypes) {
     m_store.setValue(m_layoutsKey, layoutTypes);
   }
