@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Google, Inc.
+ * Copyright (c) 2011 Google, Inc and Others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
- *    DSA - Addition of icons type styling
+ *    Daten- und Systemtechnik Aachen - Addition of icons type styling
  *******************************************************************************/
 package org.eclipse.wb.internal.core.editor.palette;
 
@@ -81,10 +81,10 @@ import java.util.Set;
  */
 public class DesignerPalette {
   public static final String FLAG_NO_PALETTE = "FLAG_NO_PALETTE"; // Don't load palette during testing
-  public static int COLUMN_ICONS_TYPE = 0;
-  public static int LIST_ICONS_TYPE = 1;
-  public static int ONLY_ICONS_TYPE = 2;
-  public static int DETAIL_ICONS_TYPE = 3;
+  public static final int COLUMN_ICONS_TYPE = 0;
+  public static final int LIST_ICONS_TYPE = 1;
+  public static final int ONLY_ICONS_TYPE = 2;
+  public static final int DETAIL_ICONS_TYPE = 3;
   ////////////////////////////////////////////////////////////////////////////
   //
   // Instance fields
