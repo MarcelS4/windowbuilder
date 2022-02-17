@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Google, Inc.
+ * Copyright (c) 2011, 2022 Google, Inc and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
+ *    Daten- und Systemtechnik Aachen - Daten- und Systemtechnik Aachen - Added layout type to the palette preferences
  *******************************************************************************/
 package org.eclipse.wb.internal.core.xml.editor.palette;
 
@@ -51,6 +52,7 @@ public final class PluginPalettePreferences implements IPalettePreferences {
   private String m_entryFontKey;
   private String m_onlyIconsKey;
   private String m_minColumnsKey;
+  private String m_layoutsKey;
 
   /**
    * Sets the prefix for preference keys.
@@ -61,6 +63,7 @@ public final class PluginPalettePreferences implements IPalettePreferences {
     m_entryFontKey = prefix + ".entry.font";
     m_onlyIconsKey = prefix + ".onlyIcons";
     m_minColumnsKey = prefix + ".columns.min";
+    m_layoutsKey = prefix + ".layouts.type";
     // set default values
     {
       {
@@ -140,7 +143,10 @@ public final class PluginPalettePreferences implements IPalettePreferences {
     m_store.setValue(m_minColumnsKey, minColumns);
   }
 
+  /**
+  * @return the specified layout in the preference store
+  */
   public int getLayoutType() {
-    return 0;
+    return m_store.getInt(m_layoutsKey);
   }
 }

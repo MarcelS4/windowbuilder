@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Google, Inc.
+ * Copyright (c) 2011, 2022 Google, Inc and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,11 +7,13 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
+ *    Daten- und Systemtechnik Aachen - Added layout type to the palette preferences
  *******************************************************************************/
 package org.eclipse.wb.internal.core.editor.palette;
 
 import org.eclipse.wb.core.controls.palette.ICategory;
 import org.eclipse.wb.core.controls.palette.IEntry;
+import org.eclipse.wb.core.controls.palette.IPaletteLayoutConstants;
 import org.eclipse.wb.core.controls.palette.IPalettePreferences;
 import org.eclipse.wb.internal.core.utils.ui.SwtResourceManager;
 
@@ -78,7 +80,7 @@ public final class PluginPalettePreferences implements IPalettePreferences {
     }
     m_store.setDefault(m_onlyIconsKey, false);
     m_store.setDefault(m_minColumnsKey, 2);
-    m_store.setDefault(m_layoutsKey, DesignerPalette.LIST_ICONS_TYPE);
+    m_store.setDefault(m_layoutsKey, IPaletteLayoutConstants.LIST_ICONS_TYPE);
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -110,6 +112,9 @@ public final class PluginPalettePreferences implements IPalettePreferences {
     return m_store.getInt(m_minColumnsKey);
   }
 
+  /**
+   * @return the specified layout in the preference store
+   */
   public int getLayoutType() {
     return m_store.getInt(m_layoutsKey);
   }

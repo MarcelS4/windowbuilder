@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Google, Inc.
+ * Copyright (c) 2011, 2022 Google, Inc. and others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
- *    DSA - Added getLayoutType method
+ *    Daten- und Systemtechnik Aachen - Added getLayoutType method
  *******************************************************************************/
 package org.eclipse.wb.core.controls.palette;
 
@@ -40,5 +40,10 @@ public interface IPalettePreferences {
    */
   int getMinColumns();
 
+  /**
+   *
+   * @return the specified layout type. Layout type is specified in
+   * @see IPaletteLayoutConstants
+   */
   int getLayoutType();
 }

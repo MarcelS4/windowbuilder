@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
- *    DSA - Adding code to allow the icons to have different layouts set
+ *    Daten- und Systemtechnik Aachen - Adding code to allow the icons to have different layouts set
  *******************************************************************************/
 package org.eclipse.wb.core.controls.palette;
 
@@ -20,7 +20,6 @@ import org.eclipse.wb.draw2d.IColorConstants;
 import org.eclipse.wb.draw2d.Layer;
 import org.eclipse.wb.draw2d.border.LineBorder;
 import org.eclipse.wb.draw2d.events.IMouseListener;
-import org.eclipse.wb.draw2d.events.IMouseMoveListener;
 import org.eclipse.wb.draw2d.events.IMouseTrackListener;
 import org.eclipse.wb.draw2d.events.MouseEvent;
 import org.eclipse.wb.draw2d.geometry.Dimension;
@@ -33,7 +32,6 @@ import org.eclipse.wb.internal.draw2d.FigureCanvas;
 import org.eclipse.wb.internal.draw2d.TargetFigureFindVisitor;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
@@ -42,8 +40,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 
 import java.util.Iterator;
 import java.util.List;
@@ -56,10 +52,6 @@ import java.util.Map;
  * @coverage core.control.palette
  */
 public final class PaletteComposite extends Composite {
-  public static int COLUMN_ICONS_TYPE = 0;
-  public static int LIST_ICONS_TYPE = 1;
-  public static int ONLY_ICONS_TYPE = 2;
-  public static int DETAIL_ICONS_TYPE = 3;
   ////////////////////////////////////////////////////////////////////////////
   //
   // Colors
@@ -68,21 +60,16 @@ public final class PaletteComposite extends Composite {
   private static final Color COLOR_PALETTE_BACKGROUND = IColorConstants.button;
   private static final Color COLOR_TEXT_ENABLED = IColorConstants.listForeground;
   private static final Color COLOR_TEXT_DISABLED = IColorConstants.gray;
-  private static final Color COLOR_ENTRY_SELECTED = DrawUtils.getShiftedColor(
-      COLOR_PALETTE_BACKGROUND,
-      24);
-  private static final Color COLOR_CATEGORY_GRAD_BEGIN = DrawUtils.getShiftedColor(
-      COLOR_PALETTE_BACKGROUND,
-      -8);
-  private static final Color COLOR_CATEGORY_GRAD_END = DrawUtils.getShiftedColor(
-      COLOR_PALETTE_BACKGROUND,
-      16);
-  private static final Color COLOR_CATEGORY_SEL_GRAD_BEGIN = DrawUtils.getShiftedColor(
-      COLOR_PALETTE_BACKGROUND,
-      16);
-  private static final Color COLOR_CATEGORY_SEL_GRAD_END = DrawUtils.getShiftedColor(
-      COLOR_CATEGORY_GRAD_BEGIN,
-      -8);
+  private static final Color COLOR_ENTRY_SELECTED =
+      DrawUtils.getShiftedColor(COLOR_PALETTE_BACKGROUND, 24);
+  private static final Color COLOR_CATEGORY_GRAD_BEGIN =
+      DrawUtils.getShiftedColor(COLOR_PALETTE_BACKGROUND, -8);
+  private static final Color COLOR_CATEGORY_GRAD_END =
+      DrawUtils.getShiftedColor(COLOR_PALETTE_BACKGROUND, 16);
+  private static final Color COLOR_CATEGORY_SEL_GRAD_BEGIN =
+      DrawUtils.getShiftedColor(COLOR_PALETTE_BACKGROUND, 16);
+  private static final Color COLOR_CATEGORY_SEL_GRAD_END =
+      DrawUtils.getShiftedColor(COLOR_CATEGORY_GRAD_BEGIN, -8);
   ////////////////////////////////////////////////////////////////////////////
   //
   // Images
@@ -135,11 +122,7 @@ public final class PaletteComposite extends Composite {
     // prepare GC (for layout)
     {
       m_paletteGC = new GC(m_figureCanvas);
-      addListener(SWT.Dispose, new Listener() {
-        public void handleEvent(Event event) {
-          m_paletteGC.dispose();
-        }
-      });
+      addListener(SWT.Dispose, event -> m_paletteGC.dispose());
     }
     // add palette figure (layer)
     m_paletteFigure = new PaletteFigure();
@@ -149,11 +132,7 @@ public final class PaletteComposite extends Composite {
       m_menuManager = new MenuManager();
       m_menuManager.setRemoveAllWhenShown(true);
       m_figureCanvas.setMenu(m_menuManager.createContextMenu(m_figureCanvas));
-      m_menuManager.addMenuListener(new IMenuListener() {
-        public void menuAboutToShow(IMenuManager manager) {
-          addPopupActions(manager);
-        }
-      });
+      m_menuManager.addMenuListener(manager -> addPopupActions(manager));
     }
     // add feedback layer
     {
@@ -418,9 +397,11 @@ public final class PaletteComposite extends Composite {
      */
     private void hookEvents() {
       addMouseListener(new IMouseListener() {
+        @Override
         public void mouseDoubleClick(MouseEvent event) {
         }
 
+        @Override
         public void mouseDown(MouseEvent event) {
           if (event.button == 1) {
             if (m_mouseOnTitle) {
@@ -431,6 +412,7 @@ public final class PaletteComposite extends Composite {
           }
         }
 
+        @Override
         public void mouseUp(MouseEvent event) {
           if (event.button == 1) {
             m_mouseDown = false;
@@ -453,33 +435,34 @@ public final class PaletteComposite extends Composite {
           repaint();
         }
       });
-      addMouseMoveListener(new IMouseMoveListener() {
-        public void mouseMove(MouseEvent event) {
-          if (m_mouseDown) {
-            Point p = new Point(event.x, event.y);
-            // update moving
-            if (!m_moving && m_downPoint.getDistance(p) > 4) {
-              m_moving = true;
-            }
-            // show feedback
-            if (m_moving) {
-              move_showFeedback(p);
-            }
-          } else {
-            m_mouseOnTitle = getTitleRectangle().contains(event.x, event.y);
-            repaint();
+      addMouseMoveListener(event -> {
+        if (m_mouseDown) {
+          Point p = new Point(event.x, event.y);
+          // update moving
+          if (!m_moving && m_downPoint.getDistance(p) > 4) {
+            m_moving = true;
           }
+          // show feedback
+          if (m_moving) {
+            move_showFeedback(p);
+          }
+        } else {
+          m_mouseOnTitle = getTitleRectangle().contains(event.x, event.y);
+          repaint();
         }
       });
       addMouseTrackListener(new IMouseTrackListener() {
+        @Override
         public void mouseEnter(MouseEvent e) {
         }
 
+        @Override
         public void mouseExit(MouseEvent e) {
           m_mouseOnTitle = false;
           repaint();
         }
 
+        @Override
         public void mouseHover(MouseEvent e) {
         }
       });
@@ -575,7 +558,8 @@ public final class PaletteComposite extends Composite {
         // prepare max size of entry
         int maxWidth = 0;
         int maxHeight = 0;
-        boolean onlyIcons = m_preferences.getLayoutType() == ONLY_ICONS_TYPE;
+        boolean onlyIcons =
+            m_preferences.getLayoutType() == IPaletteLayoutConstants.ONLY_ICONS_TYPE;
         for (Figure child : getChildren()) {
           EntryFigure entryFigure = (EntryFigure) child;
           // update size
@@ -592,7 +576,8 @@ public final class PaletteComposite extends Composite {
           }
           m_columns = Math.min(m_columns, getChildren().size());
           m_columns = Math.max(m_columns, 1);
-          if (m_layoutType == LIST_ICONS_TYPE || m_layoutType == DETAIL_ICONS_TYPE) {
+          if (m_layoutType == IPaletteLayoutConstants.LIST_ICONS_TYPE
+              || m_layoutType == IPaletteLayoutConstants.DETAIL_ICONS_TYPE) {
             m_columns = 1;
           }
         }
@@ -750,9 +735,11 @@ public final class PaletteComposite extends Composite {
      */
     private void hookEvents() {
       addMouseListener(new IMouseListener() {
+        @Override
         public void mouseDoubleClick(MouseEvent event) {
         }
 
+        @Override
         public void mouseDown(MouseEvent event) {
           if (event.button == 1) {
             m_mouseDown = true;
@@ -766,6 +753,7 @@ public final class PaletteComposite extends Composite {
           }
         }
 
+        @Override
         public void mouseUp(MouseEvent event) {
           if (event.button == 1 && m_mouseDown) {
             m_mouseDown = false;
@@ -787,38 +775,39 @@ public final class PaletteComposite extends Composite {
           repaint();
         }
       });
-      addMouseMoveListener(new IMouseMoveListener() {
-        public void mouseMove(MouseEvent event) {
-          // update mouse location
-          boolean oldMouseInside = m_mouseInside;
-          m_mouseInside = getClientArea().contains(event.x, event.y);
-          //
-          if (m_mouseDown) {
-            Point p = new Point(event.x, event.y);
-            // update moving
-            if (!m_moving && m_downPoint.getDistance(p) > 4) {
-              m_moving = true;
-            }
-            // show feedback
-            if (m_moving) {
-              move_showFeedback(p);
-            }
-          } else if (m_mouseInside != oldMouseInside) {
-            repaint();
+      addMouseMoveListener(event -> {
+        // update mouse location
+        boolean oldMouseInside = m_mouseInside;
+        m_mouseInside = getClientArea().contains(event.x, event.y);
+        //
+        if (m_mouseDown) {
+          Point p = new Point(event.x, event.y);
+          // update moving
+          if (!m_moving && m_downPoint.getDistance(p) > 4) {
+            m_moving = true;
           }
+          // show feedback
+          if (m_moving) {
+            move_showFeedback(p);
+          }
+        } else if (m_mouseInside != oldMouseInside) {
+          repaint();
         }
       });
       addMouseTrackListener(new IMouseTrackListener() {
+        @Override
         public void mouseEnter(MouseEvent e) {
           m_mouseInside = true;
           repaint();
         }
 
+        @Override
         public void mouseExit(MouseEvent e) {
           m_mouseInside = false;
           repaint();
         }
 
+        @Override
         public void mouseHover(MouseEvent e) {
         }
       });
@@ -865,11 +854,10 @@ public final class PaletteComposite extends Composite {
           // add feedback figure
           {
             FigureUtils.translateFigureToAbsolute(targetFigure, feedbackLocation);
-            m_feedback =
-                new FeedbackLine(m_feedbackLayer,
-                    true,
-                    feedbackLocation,
-                    targetFigure.getSize().width);
+            m_feedback = new FeedbackLine(m_feedbackLayer,
+                true,
+                feedbackLocation,
+                targetFigure.getSize().width);
           }
         } else {
           // prepare feedback location and command
@@ -884,11 +872,10 @@ public final class PaletteComposite extends Composite {
           // add feedback figure
           {
             FigureUtils.translateFigureToAbsolute(targetFigure, feedbackLocation);
-            m_feedback =
-                new FeedbackLine(m_feedbackLayer,
-                    false,
-                    feedbackLocation,
-                    targetFigure.getSize().height);
+            m_feedback = new FeedbackLine(m_feedbackLayer,
+                false,
+                feedbackLocation,
+                targetFigure.getSize().height);
           }
         }
       } else if (targetFigure instanceof CategoryFigure) {
@@ -1032,7 +1019,7 @@ public final class PaletteComposite extends Composite {
       // draw text
       if (!m_preferences.isOnlyIcons()) {
         graphics.setForegroundColor(COLOR_TEXT_ENABLED);
-        if (m_layoutType == DETAIL_ICONS_TYPE) {
+        if (m_layoutType == IPaletteLayoutConstants.DETAIL_ICONS_TYPE) {
           drawStringCV(
               graphics,
               m_entry.getText() + " -" + m_entry.getToolTipText(),
@@ -1268,10 +1255,23 @@ public final class PaletteComposite extends Composite {
     gc.drawLine(x, bottom, right, bottom);
   }
 
+  /**
+   * Set the layout of the icons on the palette.
+   *
+   * @see IPaletteLayoutConstants
+   *
+   * @param type
+   *          the integer indicating the type of layout.
+   */
   public void setLayoutType(int type) {
     m_layoutType = type;
   }
 
+  /**
+   * Iterates over each category figure and calls the layout option on each using the new
+   * preferences
+   *
+   */
   public void refreshComposite() {
     m_paletteFigure.onPreferencesUpdate();
   }

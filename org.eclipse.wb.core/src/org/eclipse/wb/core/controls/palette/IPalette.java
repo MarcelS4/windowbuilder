@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Google, Inc.
+ * Copyright (c) 2011, 2022 Google, Inc and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Google, Inc. - initial API and implementation
- *    DSA - Altered add popup actions to include IconType
+ *    Daten- und Systemtechnik Aachen - Altered add popup actions to include IconType
  *******************************************************************************/
 package org.eclipse.wb.core.controls.palette;
 
@@ -41,6 +41,8 @@ public interface IPalette {
    *          the {@link IMenuManager} for {@link Action}'s
    * @param target
    *          the object under cursor
+   * @param iconsType
+   *          the specified layout for the icons on the palette
    */
   void addPopupActions(IMenuManager menuManager, Object target, int iconsType);
 
